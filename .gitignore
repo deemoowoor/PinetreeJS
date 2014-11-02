@@ -2,3 +2,6 @@
 *.pid
 *.log
 node_modules
+dist
+demo
+.sass-cache

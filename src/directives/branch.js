@@ -1,11 +1,13 @@
 (function() {
+    "use strict";
+
     angular.module('pinetree')
-    .directive('ptBranch', function() {
+    .directive('ptBranch', ['treeConfig', function(treeConfig) {
         return {
             restrict: 'E', // Element
-            templateUrl: '/tpl/branch.html',
+            templateUrl: treeConfig.branchTemplateUrl,
             controller: 'ptBranchCtrl',
             controllerAs: 'branch'
         };
-    })
-});
+    }]);
+}());

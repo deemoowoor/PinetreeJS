@@ -1,11 +1,13 @@
 (function() {
+    "use strict";
+
     angular.module('pinetree')
-    .directive('ptRoot', function() {
+    .directive('ptRoot', ['treeConfig', function(treeConfig) {
         return {
             restrict: 'E', // Element
-            templateUrl: '/tpl/root.html',
+            templateUrl: treeConfig.rootTemplateUrl,
             controller: 'ptRootCtrl',
             controllerAs: 'root'
-        }
-    });
-});
+        };
+    }]);
+}());

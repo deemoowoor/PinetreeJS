@@ -1,0 +1,37 @@
+{
+  "name": "PinetreeJS",
+  "version": "2.1.5",
+  "homepage": "https://github.com/deemoowoor/PinetreeJS",
+  "authors": [
+    "Andrei Sosnin <https://github.com/deemoowoor>"
+  ],
+  "description": "Tree directive for the angular.js",
+  "main": [
+    "dist/pinetree.js",
+    "dist/pinetree.min.css"
+  ],
+  "keywords": [
+    "angular",
+    "nested",
+    "tree",
+    "node"
+  ],
+  "dependencies": {
+    "angular": ">= 1.2.0",
+    "es5-shim": "2.3.0"
+  },
+  "devDependencies": {
+    "angular": ">= 1.2.0",
+    "bootstrap": "~3.1.0",
+    "jquery": ">=1.10.x",
+    "jasmine-jquery": "~1.0.0",
+    "angular-mocks": "~1.2.11",
+    "firebase": "~1.0.11",
+    "angularfire": "~0.7.1"
+  },
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test"
+  ]
+}
