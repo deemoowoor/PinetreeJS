@@ -1,4 +1,12 @@
 PinetreeJS
 ==========
 
-A basic component for editable persisted trees structures based on AngularJS
+A basic component for editable persisted tree structures based on AngularJS
+
+
+Dependencies
+============
+
+* AngularJS
+* bootstrap-sass
+

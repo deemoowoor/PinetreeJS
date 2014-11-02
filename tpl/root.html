@@ -1,0 +1,8 @@
+<ul class="nav nav-list">
+    <li><label class="tree-toggler nav-header" ng-click="toggleItem()">{{ root.text }}</label>
+    <ul class="nav nav-list tree" ng-show="root.branches.length">
+        <pt-branch ng-repeat="branch in root.branches" ng-model="branch">
+        </pt-branch>
+    </ul>
+    <li>
+</ul>

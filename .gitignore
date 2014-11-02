@@ -1,0 +1,4 @@
+.*.swp
+*.pid
+*.log
+node_modules
