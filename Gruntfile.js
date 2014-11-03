@@ -147,6 +147,14 @@ module.exports = function(grunt) {
                 {
                     expand: true,
                     flatten: true,
+                    src: ['<%= cfg.srcDir %>/*.html'],
+                    dest: '<%= cfg.demoDir %>/',
+                    filter: 'isFile'
+                },
+
+                {
+                    expand: true,
+                    flatten: true,
                     src: ['<%= cfg.srcDir %>/tpl/*.html'],
                     dest: '<%= cfg.demoDir %>/',
                     filter: 'isFile'

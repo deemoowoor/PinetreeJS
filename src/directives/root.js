@@ -7,7 +7,8 @@
             restrict: 'E', // Element
             templateUrl: treeConfig.rootTemplateUrl,
             controller: 'ptRootCtrl',
-            controllerAs: 'root'
+            controllerAs: 'root',
+            scope: true
         };
     }]);
 }());

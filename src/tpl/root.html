@@ -1,8 +1,13 @@
 <ul class="nav nav-list">
-    <li><label class="tree-toggler nav-header" ng-click="toggleItem()">{{ root.text }}</label>
-    <ul class="nav nav-list tree" ng-show="root.branches.length">
-        <pt-branch ng-repeat="branch in root.branches" ng-model="branch">
-        </pt-branch>
+    <li><label class="tree-toggler nav-header" ng-click="toggleItem()">{{ label }} ({{branches.length}} items)</label>
+    <ul class="nav nav-list tree" ng-show="branches.length">
+        <script type="text/ng-template" id="categoryTree">
+            <label class="tree-toggler nav-header">{{ branch.label }} ({{ branch.branches.length }} items)</label>
+            <ul class="nav nav-list tree" ng-if="branch.branches">
+                <li ng-repeat="branch in branch.branches" ng-include="'categoryTree'"></li>
+            </ul>
+        </script>
+        <li ng-repeat="branch in branches" ng-include="'categoryTree'"></li>
     </ul>
     <li>
 </ul>

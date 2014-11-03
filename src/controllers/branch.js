@@ -2,9 +2,15 @@
     'use strict';
 
     angular.module('pinetree')
-    .controller('ptBranchCtrl', ['$scope', '$element',
-                function($scope, $element, branch) {
-                    $scope.text = branch.text;
-                    $scope.branches = branch.branches;
+    .controller('ptBranchCtrl', ['$scope', '$element', 'treeConfig',
+                function($scope, $element, treeConfig) {
+                    $scope.$modelValue = undefined;
+                }])
+    .controller('ptRootCtrl', ['$scope', '$element', 'treeConfig',
+                function($scope, $element, treeConfig) {
+                    $scope.$modelValue = undefined;
+                    $scope.toggleItem = function() {
+                        $element.parent().children('ul.tree').toggle(30);
+                    };
                 }]);
 }());
