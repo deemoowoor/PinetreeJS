@@ -53,10 +53,9 @@ module.exports = function(grunt) {
             build: {
                 src: [
                     '<%= cfg.srcDir %>/pinetree.js',
-                    '<%= cfg.srcDir %>/controllers/root.js',
                     '<%= cfg.srcDir %>/controllers/branch.js',
-                    '<%= cfg.srcDir %>/directives/root.js',
-                    '<%= cfg.srcDir %>/directives/branch.js'
+                    '<%= cfg.srcDir %>/directives/branch.js',
+                    '<%= cfg.srcDir %>/demo.js'
                 ],
                 dest: '<%= cfg.buildDir %>/pinetree.js'
             }
@@ -70,7 +69,11 @@ module.exports = function(grunt) {
             },
             build: {
                 files: {
-                    '<%= cfg.buildDir %>/pinetree.min.js': ['<%= cfg.srcDir %>/pinetree.js']
+                    '<%= cfg.buildDir %>/pinetree.min.js':
+                        ['<%= cfg.srcDir %>/pinetree.js',
+                            '<%= cfg.srcDir %>/controllers/branch.js',
+                            '<%= cfg.srcDir %>/directives/branch.js',
+                    ]
                 }
             }
         },
@@ -233,8 +236,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', ['tasks_list:project']);
-    grunt.registerTask('build', ['jscs:src', 'jshint:source', 'clean:build', 'concat:build',
-                       'sass:build', 'cssmin', 'uglify:build', 'copy']);
+    grunt.registerTask('build', ['jscs:src', 'jshint:source', 'clean:build', 'concat:build', 'sass:build', 'cssmin', 'uglify:build', 'copy']);
     grunt.registerTask('webserver', ['build', 'open', 'connect:demo', 'watch']);
     grunt.registerTask('test', ['jscs:src', 'jshint:source', 'karma:single']);
     grunt.registerTask('test:continuous', ['karma:continuous']);

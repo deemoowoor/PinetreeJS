@@ -4,62 +4,67 @@ describe('tree', function() {
 
     beforeEach(module('pinetree'));
 
-    beforeEach(inject(function ($rootScope, _$compile_) {
+    beforeEach(inject(function ($rootScope, _$compile_, initData) {
         scope = $rootScope;
         $compile = _$compile_;
 
-        element = angular.element('<pt-root></pt-root>');
-        scope.label = 'Root element';
-        scope.branches = [{
-            label: 'branch1'
-        },
-        {
-            label: 'branch2',
+        initData = {
+            label: 'Root branch',
             branches: [{
-                label: 'branch21'
+                label: 'branch1'
             },
             {
-                label: 'branch22'
+                label: 'branch2',
+                branches: [{
+                    label: 'branch21'
+                },
+                {
+                    label: 'branch22'
+                }]
             }]
-        }];
+        };
+
+        element = angular.element('<pt-branch></pt-branch>');
+        scope.label = initData.label;
+        scope.branches = initData.branches;
     }));
 
     function initTree() {
         element = $compile(element)(scope);
         scope.$digest();
-        /*
-         element.isolateScope().label = scope.label;
-         element.isolateScope().branches = scope.branches;
-        */
+        scope = element.scope();
         return element;
     }
-/*
-    it('isolateScope should contain the label and branches variables', function() {
-        var tree = initTree();
-        var iscope = tree.isolateScope();
-        expect(iscope).toBeDefined();
-        expect(iscope.label).toBe('Root element');
-        expect(iscope.branches).toBeDefined();
-        expect(iscope.branches.length).toBe(2);
-    });
-*/
+
+    var findRoot = function(tree) {
+        return tree.children('ul').first().children('li').first();
+    };
+
     var findFirstNested = function(tree) {
-        return tree.children('ul').first().children('li').first().children('ul');
+        return findRoot(tree).children('ul');
+    };
+
+    var getLabel = function(element) {
+        return element.children('label').text();
+    };
+
+    var getBadge = function(element) {
+        return element.children('span').text();
     };
 
     it('should be created', function() {
         var tree = initTree();
-        expect(tree.find('ul.nav li label')).toExist();
+        expect(findRoot(tree)).toExist();
     });
 
-    it('should contain Root element text', function() {
+    it('should contain correct label', function() {
         var tree = initTree();
-        expect(tree.find('ul.nav > li > label').text()).toContain('Root element');
+        expect(getLabel(findRoot(tree))).toContain('Root branch');
     });
 
-    it('should contain 2 items text', function() {
+    it('should contain 2 badge', function() {
         var tree = initTree();
-        expect(tree.find('ul.nav > li > label').text()).toContain('2 items');
+        expect(getBadge(findRoot(tree))).toBe('2');
     });
 
     it('should contain 2 branches', function() {
@@ -71,17 +76,20 @@ describe('tree', function() {
     it('should contain branch with label branch1', function() {
         var tree = initTree();
         var nestedBranches = findFirstNested(tree);
-        expect(nestedBranches.first().find('label').text()).toContain('branch1');
+        expect(getLabel(nestedBranches.first().children('li').first())).toContain('branch1');
     });
 
     it('should contain second branch with label branch2', function() {
         var tree = initTree();
         var nestedBranches = findFirstNested(tree);
-        expect(nestedBranches.find(':nth-child(2)').find('label').text()).toContain('branch2');
+        expect(getLabel(nestedBranches.find(':nth-child(2)'))).toContain('branch2');
     });
 
     it('should reflect change', function() {
         var tree = initTree();
-
+        scope.branches.push({ label: 'branch3' });
+        tree = initTree();
+        var nestedBranches = findFirstNested(tree);
+        expect(nestedBranches.children('li').length).toBe(3);
     });
 });
