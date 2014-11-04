@@ -1,7 +1,6 @@
 describe('tree', function() {
 
-    var scope, $compile;
-    var element;
+    var scope, $compile, element;
 
     beforeEach(module('pinetree'));
 
@@ -12,25 +11,38 @@ describe('tree', function() {
         element = angular.element('<pt-root></pt-root>');
         scope.label = 'Root element';
         scope.branches = [{
-            label: 'branch1',
-            branches: []
+            label: 'branch1'
         },
         {
             label: 'branch2',
             branches: [{
-                label: 'branch21',
-                branches: []
+                label: 'branch21'
+            },
+            {
+                label: 'branch22'
             }]
         }];
-
     }));
 
     function initTree() {
-        $compile(element)(scope);
+        element = $compile(element)(scope);
         scope.$digest();
+        /*
+         element.isolateScope().label = scope.label;
+         element.isolateScope().branches = scope.branches;
+        */
         return element;
     }
-
+/*
+    it('isolateScope should contain the label and branches variables', function() {
+        var tree = initTree();
+        var iscope = tree.isolateScope();
+        expect(iscope).toBeDefined();
+        expect(iscope.label).toBe('Root element');
+        expect(iscope.branches).toBeDefined();
+        expect(iscope.branches.length).toBe(2);
+    });
+*/
     var findFirstNested = function(tree) {
         return tree.children('ul').first().children('li').first().children('ul');
     };
@@ -66,5 +78,10 @@ describe('tree', function() {
         var tree = initTree();
         var nestedBranches = findFirstNested(tree);
         expect(nestedBranches.find(':nth-child(2)').find('label').text()).toContain('branch2');
+    });
+
+    it('should reflect change', function() {
+        var tree = initTree();
+
     });
 });

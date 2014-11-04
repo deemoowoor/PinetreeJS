@@ -22,7 +22,7 @@ module.exports = function(config) {
             'src/**/*.js',
 
             // templates
-            '**/*.html',
+            //'**/*.html',
 
             // tests
             'test/**/*.spec.js'

@@ -147,15 +147,7 @@ module.exports = function(grunt) {
                 {
                     expand: true,
                     flatten: true,
-                    src: ['<%= cfg.srcDir %>/*.html'],
-                    dest: '<%= cfg.demoDir %>/',
-                    filter: 'isFile'
-                },
-
-                {
-                    expand: true,
-                    flatten: true,
-                    src: ['<%= cfg.srcDir %>/tpl/*.html'],
+                    src: ['<%= cfg.srcDir %>/*.html', '<%= cfg.srcDir %>/tpl/*.html'],
                     dest: '<%= cfg.demoDir %>/',
                     filter: 'isFile'
                 },
@@ -241,7 +233,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', ['tasks_list:project']);
-    grunt.registerTask('build', ['jscs:src', 'jshint:source', 'clean:build', 'concat:build', 'sass:build', 'cssmin', 'uglify:build', 'copy']);
+    grunt.registerTask('build', ['jscs:src', 'jshint:source', 'clean:build', 'concat:build',
+                       'sass:build', 'cssmin', 'uglify:build', 'copy']);
     grunt.registerTask('webserver', ['build', 'open', 'connect:demo', 'watch']);
     grunt.registerTask('test', ['jscs:src', 'jshint:source', 'karma:single']);
     grunt.registerTask('test:continuous', ['karma:continuous']);

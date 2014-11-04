@@ -5,10 +5,14 @@
     .directive('ptBranch', ['treeConfig', function(treeConfig) {
         return {
             restrict: 'E', // Element
-            templateUrl: treeConfig.branchTemplateUrl,
+            require: ['^ptRoot', '?^ptBranch'],
+            template: treeConfig.branchTemplate,
             controller: 'ptBranchCtrl',
             controllerAs: 'branch',
-            scope: true
+            scope: {},
+            link: function($scope, $element, $attrs, controllers) {
+                $scope.init(controllers);
+            }
         };
     }]);
 }());

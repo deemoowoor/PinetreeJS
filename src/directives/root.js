@@ -5,7 +5,7 @@
     .directive('ptRoot', ['treeConfig', function(treeConfig) {
         return {
             restrict: 'E', // Element
-            templateUrl: treeConfig.rootTemplateUrl,
+            template: treeConfig.rootTemplate,
             controller: 'ptRootCtrl',
             controllerAs: 'root',
             scope: true
