@@ -13,7 +13,9 @@
                 branches: [
                     { label: 'branch221',
                         branches: [
-                            { label: 'branch2211' }
+                            { label: 'branch2211' },
+                            { label: 'branch2212' },
+                            { label: 'branch2213' }
                         ]
                     }
                     ]
@@ -24,7 +26,6 @@
     angular.module('DemoApp', ['pinetree'])
     .controller('DemoCtrl', ['$scope', '$element',
                 function($scope, $element) {
-                    $scope.label = tree.label;
-                    $scope.branches = tree.branches;
+                    $scope.tree = tree;
                 }]);
 }());

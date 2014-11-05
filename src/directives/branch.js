@@ -1,32 +1,54 @@
 (function() {
     "use strict";
 
-    angular.module('pinetree.directive', [])
-    .directive('ptBranch', ['treeConfig', function(treeConfig) {
-        return {
-            restrict: 'E', // Element
-            require: ['?^ngModel', '?^ptBranch'],
-            template: treeConfig.branchTemplate,
-            controller: 'ptBranchCtrl',
-            controllerAs: 'branch',
-            scope: true,
-            link: function($scope, $element, $attrs, parents) {
-                var parentCtrl = parents[1];
-                var ngModel = parents[0];
+    var module = angular.module('pinetree.directive', []);
 
-                // if model is defined but not parentCtrl, then it's a root element
-                if (ngModel && !parentCtrl) {
-                    ngModel.$render = function() {
-                        if (!ngModel.$modelValue || !angular.isArray(ngModel.$modelValue)){
-                            $scope.modelValue = [];
-                        }
+    function nodeDirective(isRoot, name, req, controller) {
+        var factory = function($compile) {
+            return {
+                restrict: 'AE', // Element
+                require: req,
+                controller: controller,
+                scope: true,
+                compile: function(element, attr) {
+                    var expr = attr[name],
+                        match = expr.match(/^(\S+)(\s+as\s+(\w+))?$/),
+                        watch = match[1],
+                        parentAlias = match[3] || '',
+                        template,
+                        link = {
+                            post: function($scope, $element, $attrs, parentCtrl) {
+                                $scope.level = isRoot ? 0 : $scope.level + 1;
+                                $scope.isRoot = isRoot;
 
-                        $scope.modelValue = ngModel.$modelValue;
-                    };
+                                $element.html(parentCtrl.template());
+                                $compile($element.contents())($scope);
+
+                                $scope.$watch(watch, function(value) {
+                                    $scope.ptParent = value;
+
+                                    if (parentAlias !== '') {
+                                        $scope[parentAlias] = value;
+                                    }
+                                });
+                            }
+                        };
+
+                    if (isRoot) {
+                        template = element.html();
+                        element.html('');
+                        link.pre = function($scope, $element, $attrs, ctrl) {
+                            ctrl.template(template);
+                        };
+                    }
+
+                    return link;
                 }
-
-                $scope.init(parentCtrl);
-            }
+            };
         };
-    }]);
+        return ['$compile', factory];
+    }
+
+    module.directive('ptTree', nodeDirective(true, 'ptTree', 'ptTree', 'ptTreeCtrl'));
+    module.directive('ptBranch', nodeDirective(false, 'ptBranch', '^ptTree', 'ptBranchCtrl'));
 }());

@@ -26,22 +26,33 @@
                 <h1><span class="glyphicon glyphicon-tree-conifer text-success"></span>
                     Pinetree Demo</h1>
             </div>
-            <div class="panel panel-primary">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">Tree heading</h4></div>
-                                <div class="panel-collapse collapse in" ng-controller="DemoCtrl">
-                                    <pt-branch ng-model="tree">
-                                    </pt-branch>
-                                </div>
+            <div class="panel panel-primary"><div class="panel-body row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">Tree heading</h4></div>
+                            <div class="panel-collapse" ng-controller="DemoCtrl">
+                                <ul class="list-group" pt-tree="tree as branch">
+                                    <li class="list-group-item" ng-repeat="branch in branch.branches"
+                                        ng-click="toggleCollapse()">
+
+                                    <div>
+                                        <span class="glyphicon glyphicon-minus"></span>
+                                        <label class="tree-toggler">{{ branch.label }}</label>
+                                        <span class="badge" ng-show="branch.branches && branch.collapsed">{{ branch.branches.length }}</span>
+                                        <span class="pull-right"><span class="glyphicon glyphicon-remove-sign text-danger btn" ng-click="remove()"></span></span>
+                                        <span class="pull-right"><span class="glyphicon glyphicon-plus-sign text-info btn" ng-click="add()"></span></span>
+                                    </div>
+
+                                    <ul class="list-group" pt-branch="branch" ng-if="branch.branches"></ul>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <h2>Description</h2>
-                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h2>Description</h2>
+                        <p></p>
                     </div>
                 </div>
             </div>

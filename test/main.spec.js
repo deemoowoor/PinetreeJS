@@ -1,15 +1,14 @@
 describe('tree', function() {
 
-    var scope, $compile, element;
+    var scope, compile, element, newelement;
 
     beforeEach(module('pinetree'));
 
     beforeEach(inject(function ($rootScope, _$compile_, initData) {
         scope = $rootScope;
-        $compile = _$compile_;
+        compile = _$compile_;
 
         initData = {
-            label: 'Root branch',
             branches: [{
                 label: 'branch1'
             },
@@ -24,24 +23,26 @@ describe('tree', function() {
             }]
         };
 
-        element = angular.element('<pt-branch></pt-branch>');
-        scope.label = initData.label;
-        scope.branches = initData.branches;
+        element = angular.element('<ul pt-tree="tree as branch">\n' +
+                                  '<li ng-repeat="branch in branch.branches">\n' +
+                                  '<label>{{ branch.label }}</label>\n' +
+                                  '<ul pt-branch="branch"></ul></li></ul>');
+        scope.tree = initData;
     }));
 
     function initTree() {
-        element = $compile(element)(scope);
+        newelement = compile(element)(scope);
         scope.$digest();
-        scope = element.scope();
+        scope = newelement.scope();
         return element;
     }
 
-    var findRoot = function(tree) {
-        return tree.children('ul').first().children('li').first();
+    var findFirstBranch = function(tree) {
+        return tree.children('li').first();
     };
 
-    var findFirstNested = function(tree) {
-        return findRoot(tree).children('ul');
+    var findFirstNestedBranch = function(tree) {
+        return findFirstBranch(tree).children('ul').first().children('li');
     };
 
     var getLabel = function(element) {
@@ -54,42 +55,35 @@ describe('tree', function() {
 
     it('should be created', function() {
         var tree = initTree();
-        expect(findRoot(tree)).toExist();
+        expect(tree).toExist();
     });
 
     it('should contain correct label', function() {
         var tree = initTree();
-        expect(getLabel(findRoot(tree))).toContain('Root branch');
+        expect(getLabel(findFirstBranch(tree))).toContain('branch1');
     });
 
-    it('should contain 2 badge', function() {
+    it('should contain 2 top branches', function() {
         var tree = initTree();
-        expect(getBadge(findRoot(tree))).toBe('2');
-    });
-
-    it('should contain 2 branches', function() {
-        var tree = initTree();
-        expect(findFirstNested(tree)).toExist();
-        expect(findFirstNested(tree).children('li').length).toBe(2);
+        expect(tree.children('li').length).toBe(2);
     });
 
     it('should contain branch with label branch1', function() {
         var tree = initTree();
-        var nestedBranches = findFirstNested(tree);
-        expect(getLabel(nestedBranches.first().children('li').first())).toContain('branch1');
+        var branch = findFirstBranch(tree);
+        expect(getLabel(branch)).toBe('branch1');
     });
 
     it('should contain second branch with label branch2', function() {
         var tree = initTree();
-        var nestedBranches = findFirstNested(tree);
-        expect(getLabel(nestedBranches.find(':nth-child(2)'))).toContain('branch2');
+        var branch = tree.find('li:nth-child(2)').first();
+        expect(getLabel(branch)).toBe('branch2');
     });
 
     it('should reflect change', function() {
-        var tree = initTree();
-        scope.branches.push({ label: 'branch3' });
+        scope.tree.branches.push({ label: 'branch3' });
         tree = initTree();
-        var nestedBranches = findFirstNested(tree);
-        expect(nestedBranches.children('li').length).toBe(3);
+        expect(tree.children('li').length).toBe(3);
+        expect(getLabel(tree.find('li:nth-child(3)').first())).toBe('branch3');
     });
 });
