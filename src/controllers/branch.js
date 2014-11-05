@@ -1,56 +1,81 @@
 (function() {
     'use strict';
 
-    angular.module('pinetree.controller', [])
-    .controller('ptTreeCtrl', ['$scope', '$element', '$compile',
-                function($scope, $element, $compile) {
-                    var template;
-                    this.template = function(tpl) {
-                        if (tpl) {
-                            template = tpl;
-                        } else {
-                            return template;
-                        }
-                    };
-                }
-    ])
-    .controller('ptBranchCtrl', ['$scope', '$element', '$compile',
-                function($scope, $element, $compile) {
-                    this.scope = $scope;
-                    $scope.element = $element;
-                    $scope.modelValue = undefined;
-                    $scope.parentScope = undefined;
+    var module = angular.module('pinetree.controller', [])
+    .constant('KeyEvents', { Esc: 27, Enter: 13 });
 
-                    $scope.init = function(parentCtrl) {
-                        $element.on('$destroy', function() {
-                            if (parentCtrl) {
-                                parentCtrl.scope.destroySubNode($scope); // destroy sub nodes
-                            }
-                        });
-                    };
+    function makeTreeCtrl() {
+        return ['$scope', '$element', '$compile', 'KeyEvents',
+            function($scope, $element, $compile, KeyEvents) {
+                this.scope = $scope;
+                $scope.edit = false;
+                $scope.element = $element;
 
-                    $scope.initSubNode = function(subNode) {
-                        $scope.branches.push(subNode);
-                    };
+                var template;
+                this.template = function(tpl) {
+                    if (tpl) {
+                        template = tpl;
+                    } else {
+                        return template;
+                    }
+                };
 
-                    $scope.destroySubNode = function(subNode) {
-                        $scope.branches.splice(subNode.scope.$index, 1);
-                    };
+                $scope.init = function(parentCtrl) {
+                };
 
-                    // Add an empty child
-                    $scope.add = function() {
-                        $scope.initSubNode({ label: 'emptyLabel' });
-                    };
+                // Add an empty child
+                $scope.addItem = function(b) {
+                    if (!angular.isDefined(b.branches)) {
+                        b.branches = [];
+                    }
 
-                    $scope.remove = function() {
-                        $scope.branches.splice($scope.$index, 1);
-                    };
+                    b.branches.push({ label: '', edit: true, branches: [] });
+                };
 
-                    // Toggle child expansion
-                    $scope.toggleItem = function() {
-                        $element.parent().children('ul.tree').toggle(30);
-                    };
+                // Remove a child
+                $scope.removeItem = function(b) {
+                    if (!angular.isDefined($scope.branch.branches)) {
+                        $scope.branch.branches = [];
+                        return;
+                    }
 
-                }
-    ]);
+                    var branches = $scope.branch.branches;
+                    branches.splice(branches.indexOf(b), 1);
+                };
+
+                // Toggle child expansion
+                $scope.toggleItem = function(branch) {
+                    if (branch.branches.length === 0){
+                        return;
+                    }
+                    branch.collapsed = !(branch.collapsed || false);
+                };
+
+                $scope.isCollapsed = function(branch) {
+                    return branch.collapsed;
+                };
+
+                $scope.editMode = function(branch) {
+                    branch.edit = true;
+                };
+
+                $scope.submitEdit = function(branch) {
+                    branch.edit = false;
+                };
+
+                $scope.toggleEdit = function(branch) {
+                    branch.edit = !(branch.edit || false);
+                };
+
+                $scope.onKey = function($event, branch) {
+                    if ($event.keyCode == KeyEvents.Enter || $event.keyCode == KeyEvents.Esc) {
+                        $scope.submitEdit(branch);
+                    }
+                };
+
+            }];
+    }
+
+    module.controller('ptTreeCtrl', makeTreeCtrl())
+    .controller('ptBranchCtrl', makeTreeCtrl());
 }());

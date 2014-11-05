@@ -4,11 +4,11 @@ describe('tree', function() {
 
     beforeEach(module('pinetree'));
 
-    beforeEach(inject(function ($rootScope, _$compile_, initData) {
+    beforeEach(inject(function ($rootScope, _$compile_) {
         scope = $rootScope;
         compile = _$compile_;
 
-        initData = {
+        var initData = {
             branches: [{
                 label: 'branch1'
             },

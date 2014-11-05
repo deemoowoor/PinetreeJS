@@ -17,12 +17,15 @@
                         parentAlias = match[3] || '',
                         template,
                         link = {
-                            post: function($scope, $element, $attrs, parentCtrl) {
+                            post: function($scope, $element, $attrs, ctrl) {
                                 $scope.level = isRoot ? 0 : $scope.level + 1;
                                 $scope.isRoot = isRoot;
+                                $scope.parentAlias = parentAlias;
 
-                                $element.html(parentCtrl.template());
+                                $element.html(ctrl.template());
                                 $compile($element.contents())($scope);
+
+                                $scope.init(ctrl);
 
                                 $scope.$watch(watch, function(value) {
                                     $scope.ptParent = value;
