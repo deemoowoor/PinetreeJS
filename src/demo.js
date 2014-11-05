@@ -32,12 +32,19 @@
                 ]
             };
 
-    angular.module('DemoApp', ['pinetree'])
-    .controller('DemoCtrl', ['$scope', '$element',
-                function($scope, $element) {
-                    $scope.tree = tree;
+    angular.module('DemoApp', ['pinetree', 'pinetree.services.storage'])
+    .controller('DemoCtrl', ['$scope', '$element', '$window', 'pinetreeLocalStorage',
+                function($scope, $element, $window, pinetreeLocalStorage) {
+                    if (Object.keys(pinetreeLocalStorage.model).length === 0) {
+                        $scope.tree = tree;
+                    } else {
+                        $scope.tree = pinetreeLocalStorage.model;
+                    }
+
                     $scope.addNew = function() {
                         $scope.tree.branches.push({ label: '', edit: true });
                     };
+
+                    pinetreeLocalStorage.model = $scope.tree;
                 }]);
 }());

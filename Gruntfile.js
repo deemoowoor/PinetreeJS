@@ -55,6 +55,7 @@ module.exports = function(grunt) {
                     '<%= cfg.srcDir %>/pinetree.js',
                     '<%= cfg.srcDir %>/controllers/branch.js',
                     '<%= cfg.srcDir %>/directives/branch.js',
+                    '<%= cfg.srcDir %>/services/storage.js',
                     '<%= cfg.srcDir %>/demo.js'
                 ],
                 dest: '<%= cfg.buildDir %>/pinetree.js'
@@ -73,6 +74,7 @@ module.exports = function(grunt) {
                         ['<%= cfg.srcDir %>/pinetree.js',
                             '<%= cfg.srcDir %>/controllers/branch.js',
                             '<%= cfg.srcDir %>/directives/branch.js',
+                            '<%= cfg.srcDir %>/services/storage.js',
                     ]
                 }
             }
