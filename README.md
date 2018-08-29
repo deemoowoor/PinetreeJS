@@ -15,7 +15,7 @@ TBD
 Dependencies
 ============
 
-* AngularJS
+* AngularJS 1.2
 * Bower (for testing)
 * Grunt (for building & testing)
 
